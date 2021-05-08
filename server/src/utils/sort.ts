@@ -1,6 +1,6 @@
 import { PartOfDefinition } from "../interfaces/definition";
 
-const sortBydateAndPriority = (a: PartOfDefinition, b: PartOfDefinition) => {
+const sortBydateAndPriority = (a, b) => {
   const aDate = new Date(a.nextTime);
   const bDate = new Date(b.nextTime);
 

@@ -4,6 +4,7 @@ import sortedQueue from '../dataStorages/sortedQueue';
 import GUID from 'guid';
 import dataStore from '../dataStorages/dataStore';
 import { Status } from '../interfaces/status';
+import { sortBydateAndPriority } from '../utils/sort';
 
 
 const addDefenitionsToTreatment = async (defintions: DefinitionInput[], definitionID?: string): Promise<void> => {
@@ -37,7 +38,7 @@ const getDefinitions = async (): Promise<Definition[]> => {
   for (let id of ids) {
     definitions.push({ id, ...definitionsKeyValue[id] });
   }
-  return definitions;
+  return definitions.sort(sortBydateAndPriority);
 }
 
 const getDoneDefinitions = async (): Promise<DefinitionAndTime> => {

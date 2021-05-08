@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 import PendingDefinitions from '../PendingDefinitions';
 import StatusGroup from '../StatusGroup';
 import config from '../../config.json';
-import GenerateDefinitionsBtn from '../GenerateDefinitionsBtn';
+import { generateBulk } from '../../utils/generator';
+
+import 'react-toastify/dist/ReactToastify.css';
 import './DefinitionWrapper.css'
 
 function DefinitionWrapper() {
@@ -11,23 +14,40 @@ function DefinitionWrapper() {
   const [errorDefinitions, setErrorDefinitions] = useState({});
   const [doneDefinitions, setDoneDefinitions] = useState({});
 
+  const getData = useCallback(async () => {
+    const result = await axios.get(`${config.serverhost}/definitions`);
+    const pendingDefinitions = result.data || [];
+    setDefinitions(pendingDefinitions);
+  }, [])
+  const getDoneDefinitions = useCallback(async () => {
+    const result = await axios.get(`${config.serverhost}/definitions/done`);
+    const definitions = result.data || {};
+    setDoneDefinitions(definitions);
+  }, [])
+  const getErrorDefinitions = useCallback(async () => {
+    const result = await axios.get(`${config.serverhost}/definitions/error`);
+    const definitions = result.data || {};
+    setErrorDefinitions(definitions);
+  }, [])
+
+  const generate = useCallback(async () => {
+    const bulk = generateBulk();
+    await axios.post(`${config.serverhost}/definitions`, bulk);
+    toast(`${bulk.length} definitions send to the server`, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    getData();
+    getDoneDefinitions();
+    getErrorDefinitions();
+  }, [getData, getDoneDefinitions, getErrorDefinitions]);
 
   useEffect(() => {
-    async function getData() {
-      const result = await axios.get(`${config.serverhost}/definitions`);
-      const pendingDefinitions = result.data || [];
-      setDefinitions(pendingDefinitions);
-    }
-    async function getDoneDefinitions() {
-      const result = await axios.get(`${config.serverhost}/definitions/done`);
-      const definitions = result.data || {};
-      setDoneDefinitions(definitions);
-    }
-    async function getErrorDefinitions() {
-      const result = await axios.get(`${config.serverhost}/definitions/error`);
-      const definitions = result.data || {};
-      setErrorDefinitions(definitions);
-    }
     getData();
     getDoneDefinitions();
     getErrorDefinitions();
@@ -36,13 +56,25 @@ function DefinitionWrapper() {
       getDoneDefinitions();
       getErrorDefinitions();
     }, 6000);
-  }, []);
+  }, [getData, getDoneDefinitions, getErrorDefinitions]);
+
 
 
 
   return (
     <>
-      <GenerateDefinitionsBtn />
+      <button className="generate" onClick={generate}>Generate random definitions</button>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="definition-weapper">
         <PendingDefinitions definitions={definitions} />
         <div className="status-wrapper">
