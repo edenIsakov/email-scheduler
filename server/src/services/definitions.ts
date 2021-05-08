@@ -19,7 +19,7 @@ const addDefenitionsToTreatment = async (defintions: DefinitionInput[], definiti
     }
     const interval = parser.parseExpression(definition.recurrence, options);
     const nextTime = interval.next().toString();
-    dataStore.addOne(id, { ...definition, status: Status.pendding })
+    dataStore.addOne(id, { ...definition, nextTime, status: Status.pendding })
 
     return {
       id,
