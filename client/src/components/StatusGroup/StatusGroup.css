@@ -1,0 +1,58 @@
+.status-definitions {
+  display:flex;
+  align-items: center;
+  width: 50%;
+  flex-direction: column;
+}
+
+.definitions-status-table {
+  display: inline-block;
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 90%;
+  margin-left: 10%;
+  height: 300px;
+  overflow-y: auto;
+}
+
+.definitions-status-table td, .definitions-status-table th {
+  border: 1px solid #ddd;
+}
+
+.definitions-status-table tr:nth-child(even){background-color: #f2f2f2;}
+
+.definitions-status-table tr.over-due{
+  background-color: rgba(255, 0, 0, 0.3);
+}
+
+.definitions-status-table tr.over-due:nth-child(even){
+  background-color: rgba(255, 0, 0, 0.6);
+
+}
+
+.definitions-status-table tr:hover {background-color: #ddd;}
+
+.definitions-status-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #282c34;
+  color: white;
+}
+
+.email-body {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 160px;
+  height: 1.2em;
+  white-space: nowrap;
+}
+
+.table-body{
+  overflow: auto;
+  width:100%;
+  height: 500px;
+}
+
+.table-header{
+  width:100%;
+}

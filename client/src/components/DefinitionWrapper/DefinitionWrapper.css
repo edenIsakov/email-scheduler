@@ -1,0 +1,8 @@
+.definition-weapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.status-wrapper{
+  width: 50%;
+}
