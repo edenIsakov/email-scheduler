@@ -30,7 +30,7 @@ interface DefinitionsKeyValue {
   [key: string]: DefinitionInput,
 }
 
-interface DoneDefinition {
+interface DefinitionAndTime {
   [key: string]: [string],
 }
 
@@ -40,5 +40,5 @@ export {
   PartOfDefinition,
   DefinitionTimeOut,
   DefinitionsKeyValue,
-  DoneDefinition
+  DefinitionAndTime
 }

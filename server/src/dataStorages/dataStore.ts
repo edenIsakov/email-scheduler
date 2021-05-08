@@ -3,12 +3,14 @@
  * We can replace this file with db
  */
 
-import { DefinitionInput, DefinitionsKeyValue, DoneDefinition } from "../interfaces/definition";
+import { DefinitionInput, DefinitionsKeyValue, DefinitionAndTime } from "../interfaces/definition";
 import { Status } from "../interfaces/status";
 
 const definitions: DefinitionsKeyValue = {}
 
-const doneDefinitions: DoneDefinition = {};
+const doneDefinitions: DefinitionAndTime = {};
+
+const errorDefinitions: DefinitionAndTime = {};
 
 const getById = (id: string): DefinitionInput => {
   return definitions[id];
@@ -29,8 +31,29 @@ const addToDone = (id, time) => {
   }
 }
 
+const addToError = (id, time) => {
+  delete definitions[id];
+  if (!errorDefinitions[id]) {
+    errorDefinitions[id] = [time];
+  } else {
+    errorDefinitions[id].push(time);
+  }
+}
+
 const isEmpty = () => {
   return Object.keys(definitions).length === 0;
+}
+
+const getAllDefinitions = () => {
+  return definitions;
+}
+
+const getDoneDefinitions = () => {
+  return doneDefinitions;
+}
+
+const getErrorDefinitions = () => {
+  return errorDefinitions;
 }
 
 export default {
@@ -39,4 +62,7 @@ export default {
   setStatus,
   addToDone,
   isEmpty,
+  getAllDefinitions,
+  addToError,
+  getDoneDefinitions,
 }

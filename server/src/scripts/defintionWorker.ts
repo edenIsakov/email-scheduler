@@ -4,7 +4,7 @@ import mailsToExecute from "../dataStorages/mailsToExecute";
 import sortedQueue from "../dataStorages/sortedQueue";
 import { DefinitionTimeOut, PartOfDefinition } from "../interfaces/definition";
 import { Status } from "../interfaces/status";
-import { addDefenitionsToTreatment } from "../services/definitions";
+import serviceDefinition from "../services/definitions";
 
 let currentDefinition: DefinitionTimeOut = null;
 
@@ -15,7 +15,7 @@ const treatDefenition = (definition: PartOfDefinition) => {
     currentDefinition = null;
     mailsToExecute.addOne(definition.id);
     dataStore.setStatus(definition.id, Status.sendToMailService)
-    addDefenitionsToTreatment([dataStore.getById(definition.id)]);
+    serviceDefinition.addDefenitionsToTreatment([dataStore.getById(definition.id)], definition.id);
     console.log(`${definition.id} sent to mail service`);
   }, deftime.diff(currentTime));
   currentDefinition = { ...definition, timeOut }

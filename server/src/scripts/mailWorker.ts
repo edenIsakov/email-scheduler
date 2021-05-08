@@ -1,6 +1,7 @@
 /**
  * Split to another service
  */
+import parser from 'cron-parser';
 import dataStore from "../dataStorages/dataStore";
 import mailsToExecute from "../dataStorages/mailsToExecute";
 import { Definition } from "../interfaces/definition"
@@ -18,11 +19,16 @@ const dealWithMails = () => {
     if (!mailsToExecute.isEmpty()) {
       const id = mailsToExecute.getFirst();
       const definition = dataStore.getById(id);
+      const options = {
+        tz: definition.timezone,
+      }
+      const interval = parser.parseExpression(definition.recurrence, options);
+      const time = interval.prev().toString();
       try {
         await sendMail({ id, ...definition });
-        dataStore.addToDone(id, definition.nextTime);
+        dataStore.addToDone(id, time);
       } catch (error) {
-        dataStore.setStatus(id, Status.error);
+        dataStore.addToError(id, time);
       }
     }
   }, 1500)
