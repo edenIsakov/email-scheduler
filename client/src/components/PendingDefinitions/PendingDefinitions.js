@@ -11,24 +11,24 @@ const PendingDefinitions = memo(({ definitions }) => {
         <thead>
           <tr>
             <th>definition Id</th>
+            <th>nextTime</th>
+            <th>priority</th>
             <th>resipients</th>
             <th>emailBody</th>
             <th>timezone</th>
             <th>recurrence</th>
-            <th>priority</th>
-            <th>nextTime</th>
           </tr>
         </thead>
         <tbody className="table-body">
           {definitions.map(definition => (
             <tr className={moment().diff(moment(definition.time), 'seconds') > 60 ? 'over-due' : 'in-time'} key={definition.id}>
               <td>{definition.id}</td>
+              <td>{moment(definition.nextTime).format('DD/MM/YYYY HH:mm:ss')}</td>
+              <td>{definition.priority}</td>
               <td><div className="resipients">{definition.resipientsList}</div></td>
               <td><div className="email-body">{definition.body}</div></td>
               <td>{definition.timezone}</td>
               <td>{definition.recurrence}</td>
-              <td>{definition.priority}</td>
-              <td>{moment(definition.nextTime).format('DD/MM/YYYY HH:mm:ss')}</td>
             </tr>
           ))}
         </tbody>
