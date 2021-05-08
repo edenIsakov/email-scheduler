@@ -3,6 +3,7 @@ import axios from 'axios';
 import PendingDefinitions from '../PendingDefinitions';
 import StatusGroup from '../StatusGroup';
 import config from '../../config.json';
+import GenerateDefinitionsBtn from '../GenerateDefinitionsBtn';
 import './DefinitionWrapper.css'
 
 function DefinitionWrapper() {
@@ -22,36 +23,45 @@ function DefinitionWrapper() {
       const definitions = result.data || {};
       setDoneDefinitions(definitions);
     }
+    async function getErrorDefinitions() {
+      const result = await axios.get(`${config.serverhost}/definitions/error`);
+      const definitions = result.data || {};
+      setErrorDefinitions(definitions);
+    }
     getData();
     getDoneDefinitions();
+    getErrorDefinitions();
     setInterval(() => {
       getData();
       getDoneDefinitions();
+      getErrorDefinitions();
     }, 6000);
   }, []);
 
 
 
   return (
-    <div className="definition-weapper">
-      <PendingDefinitions definitions={definitions} />
-      <div className="status-wrapper">
-        {
-          Object.keys(doneDefinitions).length !== 0 &&
-          (<div>
-            <StatusGroup status='done' definitions={doneDefinitions} />
-          </div>)
-        }
-        {
-          Object.keys(errorDefinitions).length !== 0 &&
-          (<div>
-            <StatusGroup status='error' definitions={errorDefinitions} />
-          </div>)
-        }
-
+    <>
+      <GenerateDefinitionsBtn />
+      <div className="definition-weapper">
+        <PendingDefinitions definitions={definitions} />
+        <div className="status-wrapper">
+          {
+            Object.keys(doneDefinitions).length !== 0 &&
+            (<div>
+              <StatusGroup status='done' definitions={doneDefinitions} />
+            </div>)
+          }
+          {
+            Object.keys(errorDefinitions).length !== 0 &&
+            (<div>
+              <StatusGroup status='error' definitions={errorDefinitions} />
+            </div>)
+          }
+        </div>
       </div>
+    </>
 
-    </div>
   );
 }
 
